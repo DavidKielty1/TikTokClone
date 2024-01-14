@@ -1,15 +1,16 @@
+// auth.service.ts
 import {
+  BadRequestException,
   Injectable,
   UnauthorizedException,
-  BadRequestException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { PrismaService } from '../prisma.service';
+import { PrismaService } from '../prisma.service'; // Your Prisma service
+import { RegisterDto, LoginDto } from './dto';
 import * as bcrypt from 'bcrypt';
 import { Response, Request } from 'express';
 import { User } from '@prisma/client';
 import { ConfigService } from '@nestjs/config';
-import { LoginDto, RegisterDto } from './dto';
 
 @Injectable()
 export class AuthService {
@@ -18,9 +19,9 @@ export class AuthService {
     private readonly prisma: PrismaService,
     private readonly configService: ConfigService,
   ) {}
-
   async refreshToken(req: Request, res: Response): Promise<string> {
     const refreshToken = req.cookies['refresh_token'];
+
     if (!refreshToken) {
       throw new UnauthorizedException('Refresh token not found');
     }
@@ -37,11 +38,12 @@ export class AuthService {
     const userExists = await this.prisma.user.findUnique({
       where: { id: payload.sub },
     });
+
     if (!userExists) {
       throw new BadRequestException('User no longer exists');
     }
 
-    const expiresIn = 15000;
+    const expiresIn = 15000; // seconds
     const expiration = Math.floor(Date.now() / 1000) + expiresIn;
     const accessToken = this.jwtService.sign(
       { ...payload, exp: expiration },
@@ -54,7 +56,6 @@ export class AuthService {
 
     return accessToken;
   }
-
   private async issueTokens(user: User, response: Response) {
     const payload = { username: user.fullname, sub: user.id };
 
@@ -78,8 +79,7 @@ export class AuthService {
 
     return { user };
   }
-
-  async validateUser(loginDto: LoginDto) {
+  async validateUser(loginDto: LoginDto): Promise<any> {
     const user = await this.prisma.user.findUnique({
       where: { email: loginDto.email },
     });
@@ -90,12 +90,13 @@ export class AuthService {
   }
 
   async register(registerDto: RegisterDto, response: Response) {
+    console.log('registerDto!!!', registerDto);
     const existingUser = await this.prisma.user.findUnique({
       where: { email: registerDto.email },
     });
 
     if (existingUser) {
-      throw new Error('Email already in use');
+      throw new Error('Email already in use'); // Provide a proper error response
     }
 
     const hashedPassword = await bcrypt.hash(registerDto.password, 10);
@@ -107,21 +108,23 @@ export class AuthService {
         email: registerDto.email,
       },
     });
-
-    return this.issueTokens(user, response);
+    console.log('user!!!', user);
+    return this.issueTokens(user, response); // Issue tokens on registration
   }
 
   async login(loginDto: LoginDto, response: Response) {
     const user = await this.validateUser(loginDto);
+
     if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new Error('Invalid credentials'); // Provide a proper error response
     }
-    return this.issueTokens(user, response);
+
+    return this.issueTokens(user, response); // Issue tokens on login
   }
 
   async logout(response: Response) {
     response.clearCookie('access_token');
-    response.clearCookie('response_token');
+    response.clearCookie('refresh_token');
     return 'Successfully logged out';
   }
 }
