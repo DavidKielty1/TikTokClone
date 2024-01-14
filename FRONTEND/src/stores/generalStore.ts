@@ -10,7 +10,7 @@ export interface GeneralState {
 }
 
 export interface GeneralActions {
-  setLoginIsOpen: (isLoginOpen: boolean) => void;
+  setIsLoginOpen: (isLoginOpen: boolean) => void;
   setIsEditProfileOpen: () => void;
 }
 
@@ -23,7 +23,7 @@ export const useGeneralStore = create<GeneralState & GeneralActions>()(
         selectedPosts: null,
         ids: null,
         posts: null,
-        setLoginIsOpen: (isLoginOpen: boolean) => {
+        setIsLoginOpen: (isLoginOpen: boolean) => {
           set({ isLoginOpen });
         },
         setIsEditProfileOpen: () => {

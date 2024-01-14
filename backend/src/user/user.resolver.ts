@@ -3,8 +3,9 @@ import { AuthService } from 'src/auth/auth.service';
 import { UserService } from './user.service';
 import { LoginResponse, RegisterResponse } from 'src/auth/types';
 import { LoginDto, RegisterDto } from 'src/auth/dto';
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, UseFilters } from '@nestjs/common';
 import { Response, Request } from 'express';
+import { GraphQLErrorFilter } from 'src/filters.ts/custom-exception.filter';
 
 @Resolver()
 export class UserResolver {
@@ -13,6 +14,7 @@ export class UserResolver {
     private readonly userService: UserService,
   ) {}
 
+  @UseFilters(GraphQLErrorFilter)
   @Mutation(() => RegisterResponse)
   async register(
     @Args('registerInput') registerDto: RegisterDto,
@@ -25,22 +27,11 @@ export class UserResolver {
       });
     }
 
-    try {
-      const { user } = await this.authService.register(
-        registerDto,
-        context.res,
-      );
-      console.log('user!', user);
-      return { user };
-    } catch (error) {
-      return {
-        error: {
-          message: error.message,
-        },
-      };
-    }
+    const { user } = await this.authService.register(registerDto, context.res);
+    return { user };
   }
 
+  @UseFilters(GraphQLErrorFilter)
   @Mutation(() => LoginResponse)
   async login(
     @Args('loginInput') loginDto: LoginDto,
