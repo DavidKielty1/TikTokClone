@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { REGISTER_USER } from "../graphql/mutations/Register";
+import { RegisterUserMutation } from "../gql/graphql";
+import { GraphQLErrorExtensions } from "graphql";
 import { useMutation } from "@apollo/client";
 import { useUserStore } from "../stores/userStore";
-import { GraphQLErrorExtensions } from "graphql";
 import { useGeneralStore } from "../stores/generalStore";
-import { RegisterUserMutation } from "../gql/graphql";
 import Input from "./Input";
 
 function Register() {
