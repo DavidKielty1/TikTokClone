@@ -6,6 +6,7 @@ import { LoginDto, RegisterDto } from 'src/auth/dto';
 import { BadRequestException, UseFilters } from '@nestjs/common';
 import { Response, Request } from 'express';
 import { GraphQLErrorFilter } from 'src/filters.ts/custom-exception.filter';
+import { User } from './user.model';
 
 @Resolver()
 export class UserResolver {
@@ -57,5 +58,10 @@ export class UserResolver {
   @Query(() => String)
   async hello() {
     return 'Hello World';
+  }
+
+  @Query(() => [User])
+  async getUsers() {
+    return this.userService.getUsers();
   }
 }
