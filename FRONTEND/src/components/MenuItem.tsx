@@ -24,7 +24,13 @@ const MenuItem: React.FC<IconComponentsProps> = ({
   return (
     <div className="w-full flex items-center hover:bg-gray-100 p-2.5 rounded-md">
       <div className="flex items-center lg:mx-0 mx-auto">
-        {Icon && <Icon color={colorString} size={parseInt(sizeString, 10)} />}
+        {Icon && (
+          <Icon
+            color={colorString}
+            size={parseInt(sizeString, 10)}
+            className="cursor-pointer"
+          />
+        )}
         <span
           className={`lg:block hidden pl-[9px] mt-0.5 font-semibold text-[17px] text-[${colorString}]`}
         >

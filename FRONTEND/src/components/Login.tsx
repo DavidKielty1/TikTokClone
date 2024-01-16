@@ -8,7 +8,7 @@ import { LoginUserMutation } from "../gql/graphql";
 import Input from "./Input";
 
 function Login() {
-  const [loginUser, { data }] = useMutation<LoginUserMutation>(LOGIN_USER);
+  const [loginUser, { data, err }] = useMutation<LoginUserMutation>(LOGIN_USER);
 
   const setUser = useUserStore((state) => state.setUser);
   const setIsLoginOpen = useGeneralStore((state) => state.setIsLoginOpen);
@@ -23,26 +23,22 @@ function Login() {
   const handleLogin = async () => {
     setErrors({});
 
-    await loginUser({
-      variables: {
-        email: loginData.email,
-        password: loginData.password,
-      },
-    }).catch((err) => {
+    try {
+      const response = await loginUser({
+        variables: {
+          email: loginData.email,
+          password: loginData.password,
+        },
+      });
+      response && response.data && setUser(response.data.login.user);
+      setIsLoginOpen(false);
+    } catch (_) {
       if (err.graphQLErrors[0].extensions?.invalidCredentials)
         setInvalidCredentials(
           err.graphQLErrors[0].extensions?.invalidCredentials
         );
       setErrors(err.graphQLErrors[0].extensions);
-    });
-
-    if (data?.login.user)
-      setUser({
-        id: data?.login.user.id,
-        email: data?.login.user.email,
-        fullname: data?.login.user.fullname,
-      });
-    setIsLoginOpen(false);
+    }
   };
 
   return (

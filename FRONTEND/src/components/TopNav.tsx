@@ -80,7 +80,11 @@ function TopNav() {
             placeholder="Search accounts"
           />
           <div className="px-3 py-1 flex items-center border-l-gray-3">
-            <AiOutlineSearch size="20" color="grey" />
+            <AiOutlineSearch
+              size="20"
+              color="grey"
+              className="cursor-pointer"
+            />
           </div>
         </div>
         <div className="flex items-center justify-end gap-3 min-w-[275px] w-full max-w-[320px]">
@@ -116,8 +120,16 @@ function TopNav() {
             </div>
           )}
           <div className="flex items-center">
-            <BsFillSendFill size="25" color="darkblue" />
-            <BiMessageDetail size="25" color="darkblue" />
+            <BsFillSendFill
+              size="25"
+              color="darkblue"
+              className="cursor-pointer"
+            />
+            <BiMessageDetail
+              size="25"
+              color="darkblue"
+              className="cursor-pointer"
+            />
             <div className="relative">
               <button className="mt-1" onClick={() => setShowMenu(!showMenu)}>
                 <img
@@ -142,7 +154,7 @@ function TopNav() {
                 {user.id && (
                   <div
                     onClick={handleLogout}
-                    className="flex gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hoer:text-gray-900"
+                    className="cursor-pointer flex gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hoer:text-gray-900"
                   >
                     <GrLogout size="20" color="darkblue" />
                     <span className="font-semibold text-sm">Log out</span>
