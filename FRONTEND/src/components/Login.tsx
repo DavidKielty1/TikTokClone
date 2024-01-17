@@ -8,7 +8,7 @@ import { LoginUserMutation } from "../gql/graphql";
 import Input from "./Input";
 
 function Login() {
-  const [loginUser, { data, err }] = useMutation<LoginUserMutation>(LOGIN_USER);
+  const [loginUser, { err }] = useMutation<LoginUserMutation>(LOGIN_USER);
 
   const setUser = useUserStore((state) => state.setUser);
   const setIsLoginOpen = useGeneralStore((state) => state.setIsLoginOpen);
