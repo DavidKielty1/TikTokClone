@@ -6,3 +6,5 @@ declare namespace Express {
     };
   }
 }
+
+declare module 'graphql-upload/graphqlUploadExpress.js';
