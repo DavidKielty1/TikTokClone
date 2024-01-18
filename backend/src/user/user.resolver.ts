@@ -1,12 +1,12 @@
+import { Response, Request } from 'express';
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { AuthService } from 'src/auth/auth.service';
-import { UserService } from './user.service';
+import { GraphQLErrorFilter } from 'src/filters.ts/custom-exception.filter';
+import { BadRequestException, UseFilters } from '@nestjs/common';
 import { LoginResponse, RegisterResponse } from 'src/auth/types';
 import { LoginDto, RegisterDto } from 'src/auth/dto';
-import { BadRequestException, UseFilters } from '@nestjs/common';
-import { Response, Request } from 'express';
-import { GraphQLErrorFilter } from 'src/filters.ts/custom-exception.filter';
 import { User } from './user.model';
+import { AuthService } from 'src/auth/auth.service';
+import { UserService } from './user.service';
 
 @Resolver()
 export class UserResolver {

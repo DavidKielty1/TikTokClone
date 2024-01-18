@@ -1,10 +1,10 @@
 import { Args, Context, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { PostService } from './post.service';
 import * as GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
-import { Request } from 'express';
-import { PostDetails, PostType } from './post.type';
 import { UseGuards } from '@nestjs/common';
+import { Request } from 'express';
 import { GraphqlAuthGuard } from 'src/auth/graphlql-auth.guard';
+import { PostService } from './post.service';
+import { PostDetails, PostType } from './post.type';
 
 @Resolver()
 export class PostResolver {
