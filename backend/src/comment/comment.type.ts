@@ -18,7 +18,7 @@ export class Comment {
   text: string;
 
   @Field()
-  createdat: Date;
+  createdAt: Date;
 
   @Field()
   updatedAt: Date;
