@@ -8,7 +8,7 @@ import { LoginUserMutation } from "../gql/graphql";
 import Input from "./Input";
 
 function Login() {
-  const [loginUser, { err }] = useMutation<LoginUserMutation>(LOGIN_USER);
+  const [loginUser, { error }] = useMutation<LoginUserMutation>(LOGIN_USER);
 
   const setUser = useUserStore((state) => state.setUser);
   const setIsLoginOpen = useGeneralStore((state) => state.setIsLoginOpen);
@@ -33,13 +33,16 @@ function Login() {
       response && response.data && setUser(response.data.login.user);
       setIsLoginOpen(false);
     } catch (_) {
-      if (err.graphQLErrors[0].extensions?.invalidCredentials)
+      if (!error) return;
+      if (error.graphQLErrors[0].extensions?.invalidCredentials)
         setInvalidCredentials(
-          err.graphQLErrors[0].extensions?.invalidCredentials
+          error.graphQLErrors[0].extensions.invalidCredentials as string
         );
-      setErrors(err.graphQLErrors[0].extensions);
+      setErrors(error?.graphQLErrors[0].extensions);
     }
   };
+
+  console.log(invalidCredentials);
 
   return (
     <>

@@ -97,17 +97,23 @@ function Post() {
   );
 
   const loopThroughPostsUp = () => {
-    if (currentPostIdIndex === dataPost?.getPostById.otherPostIds.length - 1)
+    if (
+      dataPost?.getPostById.otherPostIds &&
+      currentPostIdIndex === dataPost?.getPostById.otherPostIds.length - 1
+    )
       return;
     setCurrentPostIdIndex(currentPostIdIndex + 1);
-    const nextPostId = dataPost?.getPostById.otherPostIds[currentPostIdIndex];
+    if (!dataPost?.getPostById.otherPostIds) return;
+    const nextPostId =
+      dataPost?.getPostById?.otherPostIds[currentPostIdIndex + 1];
     navigate(`/post/${nextPostId}`);
   };
   const loopThroughPostsDown = () => {
     if (currentPostIdIndex === 0) return;
     setCurrentPostIdIndex(currentPostIdIndex - 1);
-    const nextPostId = dataPost?.getPostById.otherPostIds[currentPostIdIndex];
-    console.log("nextPostId(LookThroughPostsDown)", nextPostId);
+    if (!dataPost?.getPostById.otherPostIds) return;
+    const nextPostId =
+      dataPost?.getPostById.otherPostIds[currentPostIdIndex - 1];
     navigate(`/post/${nextPostId}`);
   };
 
@@ -213,7 +219,7 @@ function Post() {
 
   return (
     <div
-      className="fixed lg:flex justify-between z-50 top-0 left-0 w-full h-full bg-black lg:overflow-hidden overflow-auto "
+      className="fixed top-0 left-0 z-50 justify-between w-full h-full overflow-auto bg-black lg:flex lg:overflow-hidden "
       id="Post"
     >
       <div className="lg:w-[calc(100%-540px)] h-full relative">
@@ -262,7 +268,7 @@ function Post() {
         {loadingPost ? (
           <div className="flex items-center justify-center bg-black bg-opacity-70 h-screen lg:min-w-[400px]">
             <ImSpinner2
-              className="animate-spin ml-1"
+              className="ml-1 animate-spin"
               size="100"
               color="white"
             />
@@ -282,7 +288,7 @@ function Post() {
             {!isPlaying && (
               <AiFillPlayCircle
                 size="100"
-                className="rounded-full z-100 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-black cursor-pointer"
+                className="absolute text-black transform -translate-x-1/2 -translate-y-1/2 rounded-full cursor-pointer z-100 top-1/2 left-1/2"
               />
             )}
           </div>
@@ -297,7 +303,7 @@ function Post() {
           <div className="flex items-center">
             <Link to="/">
               <img
-                className="rounded-full lg:mx-0 mx-auto"
+                className="mx-auto rounded-full lg:mx-0"
                 width="40"
                 src={
                   dataPost?.getPostById.user.image ||
@@ -325,23 +331,23 @@ function Post() {
           Original sound - {dataPost?.getPostById.user.fullname}
         </div>
         <div className="flex items-center px-8 mt-8">
-          <div className="pb-4 text-center flex items-center">
+          <div className="flex items-center pb-4 text-center">
             <button
               disabled={dataPost?.getPostById.user.id === loggedInUserId}
-              className="rounded-full bg-gray-200 p-2 cursor-pointer"
+              className="p-2 bg-gray-200 rounded-full cursor-pointer"
               onClick={() => (isLiked ? handleRemoveLike() : handleLikePost())}
             >
               <AiFillHeart size="25" color={isLiked ? "red" : "black"} />
             </button>
-            <span className="text-xs pl-2 pr-4 text-gray-800 font-semibold">
+            <span className="pl-2 pr-4 text-xs font-semibold text-gray-800">
               {dataPost?.getPostById?.likes?.length}
             </span>
           </div>
-          <div className="pb-4 text-center flex items-center">
-            <div className="rounded-full bg-gray-200 p-2 cursor-pointer">
+          <div className="flex items-center pb-4 text-center">
+            <div className="p-2 bg-gray-200 rounded-full cursor-pointer">
               <BsFillChatDotsFill size="25" color="black" />
             </div>
-            <span className="text-xs pl-2 pr-4 text-gray-800 font-semibold">
+            <span className="pl-2 pr-4 text-xs font-semibold text-gray-800">
               {postComments?.getCommentsByPostId?.length}
             </span>
           </div>
@@ -352,19 +358,19 @@ function Post() {
         >
           <div className="pt-2" />
           {postComments?.getCommentsByPostId.length === 0 && (
-            <div className="text-center mt-6 text-xl text-gray-500">
+            <div className="mt-6 text-xl text-center text-gray-500">
               No comments...
             </div>
           )}
           <div className="flex flex-col items-center justify-between px-8 mt-4">
             {postComments?.getCommentsByPostId.map((comment) => (
               <div
-                className="flex items-center relative w-full"
+                className="relative flex items-center w-full"
                 key={comment.id}
               >
                 <Link to="/">
                   <img
-                    className="absolute top-0 rounded-full lg:mx-0 mx-auto"
+                    className="absolute top-0 mx-auto rounded-full lg:mx-0"
                     width="40"
                     src={
                       comment.user.image || "https://picsum.photos/id/8/300/320"
