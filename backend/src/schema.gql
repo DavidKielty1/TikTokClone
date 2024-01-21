@@ -51,7 +51,7 @@ type Mutation {
 }
 
 type PostDetails {
-  createdAt: DateTime!
+  createdAt: DateTime
   id: Int!
   likes: [LikeType!]
   otherPostIds: [Float!]
@@ -61,7 +61,7 @@ type PostDetails {
 }
 
 type PostType {
-  createdAt: DateTime!
+  createdAt: DateTime
   id: Int!
   likes: [LikeType!]
   text: String!
@@ -95,11 +95,11 @@ scalar Upload
 
 type User {
   bio: String
-  createdAt: DateTime!
+  createdAt: DateTime
   email: String!
   fullname: String!
   id: Float!
   image: String
-  password: String!
-  updatedAt: DateTime!
+  password: String
+  updatedAt: DateTime
 }

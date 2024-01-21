@@ -10,11 +10,12 @@ export class PostType {
   @Field()
   text: string;
 
-  @Field()
-  createdAt: Date;
+  @Field({ nullable: true })
+  createdAt?: Date;
 
   @Field()
   video: string;
+
   @Field(() => User)
   user?: User;
 
